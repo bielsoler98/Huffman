@@ -5,13 +5,14 @@
  */
 package control;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-import javax.swing.JFileChooser;
 import modelo.Modelo;
 import vista.Vista;
 import huffman.huffmanInterface.Controller;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import modelo.Nodo;
 
 /**
  *
@@ -27,27 +28,31 @@ public class Control implements Controller{
         this.modelo=modelo;
     }
     
-    public void selectFile(){
-        Scanner entrada = null;
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.showOpenDialog(fileChooser);
+    public void selectFile() throw new IOException{
+        //File f = new File(vista.showSelectFile());
+        //Scanner entrada = null;
+        RandomAccessFile entrada=null;
         try {
-            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
-            File f = new File(ruta);
-            entrada = new Scanner(f);
-            while (entrada.hasNext()) {
-                System.out.println(entrada.nextLine());
+            entrada = new RandomAccessFile(vista.showSelectFile(),"r");
+            //entrada = new Scanner(f);
+            while (entrada.length()!=0) {
+                modelo.addNodo(entrada.readByte(),0, null, null);
             }
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            vista.notFileFound(e.getMessage());
         } catch (NullPointerException e) {
-            System.out.println("No se ha seleccionado ningún fichero");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            vista.notFileSelect();
+        } catch (IOException e) {
+            vista.showError(e.getMessage());
         } finally {
-            if (entrada != null) {
-                entrada.close();
-            }
+               entrada.close();
+        }
+    }
+    
+    public void showLista(){
+        ArrayList<Nodo> lista = modelo.getLista();
+        for(int i=0; i<lista.size(); i++){
+            System.out.println(lista.get(i).getBits());
         }
     }
 }

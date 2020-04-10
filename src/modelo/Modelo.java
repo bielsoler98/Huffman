@@ -7,6 +7,7 @@ package modelo;
 
 import control.Control;
 import huffman.huffmanInterface.Model;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,15 +16,25 @@ import huffman.huffmanInterface.Model;
 public class Modelo implements Model{
     
     private Control control;
-    private static Arbol arbol;
+    private ArrayList<Nodo> lista;
     
     public Modelo(){
-        
+        lista = new ArrayList<>();
     }
 
     public void setControl(Control control) {
         this.control = control;
     }
+    
+    public void addNodo(Byte b, int n, Nodo dch, Nodo izq){
+        Nodo nodo = new Nodo(b,n,dch,izq);
+        lista.add(nodo);
+    }
+
+    public ArrayList<Nodo> getLista() {
+        return lista;
+    }
+    
     
     
 }

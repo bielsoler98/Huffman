@@ -9,8 +9,11 @@ import control.Control;
 import huffman.huffmanInterface.View;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.FileNotFoundException;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JToolBar;
 
@@ -67,9 +70,32 @@ public class Vista extends JFrame implements View{
         JButton select = new JButton("Seleccionar archivo");
         select.addActionListener((ActionEvent) -> {
           control.selectFile();
+          control.showLista();
         });
         barraTools.add(select);
         barraTools.addSeparator();
+    }
+    
+    public String showSelectFile(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.showOpenDialog(fileChooser);
+        return fileChooser.getSelectedFile().getAbsolutePath();
+    }
+    
+    public void notFileFound(String s){
+        JOptionPane.showMessageDialog(this, "notFileFound");
+    }
+    
+    public void notFileSelect(){
+        JOptionPane.showMessageDialog(this, "No ha seleccionado ningún archivo");
+    }
+    
+    public void showError(String s){
+        JOptionPane.showMessageDialog(this, "showError");
+    }
+    
+     public void showError2(String s){
+        JOptionPane.showMessageDialog(this, "showError2");
     }
 
     public void setControl(Control control) {

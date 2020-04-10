@@ -5,6 +5,9 @@
  */
 package huffman;
 
+import java.util.ArrayList;
+import modelo.Nodo;
+
 /**
  *
  * @author Andrea
@@ -12,12 +15,20 @@ package huffman;
 public interface huffmanInterface {
     
     interface View{
+        String showSelectFile();
+        void notFileFound(String s);
+        void notFileSelect();
+        void showError(String s);
+        void showError2(String s);
     }
     
     interface Model{
+        void addNodo(Byte b, int n, Nodo dch, Nodo izq);
+        ArrayList<Nodo> getLista();
     }
     
     interface Controller{
         void selectFile();
+        void showLista();
     }
 }
