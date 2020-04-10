@@ -5,6 +5,10 @@
  */
 package huffman;
 
+import control.Control;
+import modelo.Modelo;
+import vista.Vista;
+
 /**
  *
  * @author biels
@@ -15,7 +19,12 @@ public class Huffman {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Control control = null;
+        Modelo model = new Modelo();
+        Vista vista = new Vista();
+        control = new Control(vista, model);
+        vista.setControl(control);
+        model.setControl(control);
     }
     
 }
