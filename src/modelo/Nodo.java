@@ -9,26 +9,26 @@ package modelo;
  *
  * @author Andrea
  */
-public class Nodo {
+public class Nodo implements Comparable<Nodo> {
     
-    private byte bits;
+    private byte bytes;
     private int aparicion;
     private Nodo drch;
     private Nodo izq;
     
     public Nodo(byte b, int n, Nodo drch, Nodo izq){
-        this.bits=b;
+        this.bytes=b;
         this.aparicion=n;
         this.drch=drch;
         this.izq=izq;
     }
 
-    public byte getBits() {
-        return bits;
+    public byte getBytes() {
+        return bytes;
     }
 
     public void setBits(byte bits) {
-        this.bits = bits;
+        this.bytes = bits;
     }
 
     public int getAparicion() {
@@ -53,6 +53,15 @@ public class Nodo {
 
     public void setIzq(Nodo izq) {
         this.izq = izq;
+    }
+    
+    public void addAparic(){
+        this.aparicion++;
+    }
+
+    @Override
+    public int compareTo(Nodo o) {
+       return this.aparicion-o.aparicion;
     }
     
     

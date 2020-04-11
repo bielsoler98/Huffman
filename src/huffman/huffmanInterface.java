@@ -6,6 +6,7 @@
 package huffman;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import modelo.Nodo;
 
 /**
@@ -19,16 +20,23 @@ public interface huffmanInterface {
         void notFileFound(String s);
         void notFileSelect();
         void showError(String s);
-        void showError2(String s);
+        void ioexception(String s);
     }
     
     interface Model{
-        void addNodo(Byte b, int n, Nodo dch, Nodo izq);
+        HashMap<Byte,Integer> getDicc();
         ArrayList<Nodo> getLista();
+        boolean containsByte(Byte b);
+        void addAparicionNodo(Byte b);
+        void createNewNodo(Byte b);
+        void createList();
     }
     
     interface Controller{
-        void selectFile();
+        String selectFile();
+        void readFile(String file);
+        void showDicc();
         void showLista();
+        void createList();
     }
 }

@@ -8,6 +8,8 @@ package modelo;
 import control.Control;
 import huffman.huffmanInterface.Model;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  *
@@ -17,23 +19,49 @@ public class Modelo implements Model{
     
     private Control control;
     private ArrayList<Nodo> lista;
+    private HashMap<Byte,Integer> dicc;
     
     public Modelo(){
         lista = new ArrayList<>();
+        dicc= new HashMap<>();
     }
 
     public void setControl(Control control) {
         this.control = control;
     }
+
+    public HashMap<Byte,Integer> getDicc() {
+        return this.dicc;
+    }
     
-    public void addNodo(Byte b, int n, Nodo dch, Nodo izq){
-        Nodo nodo = new Nodo(b,n,dch,izq);
-        lista.add(nodo);
+    public ArrayList<Nodo> getLista(){
+        return this.lista;
     }
 
-    public ArrayList<Nodo> getLista() {
-        return lista;
+    public boolean containsByte(Byte b) {
+       if(dicc.containsKey(b)) return true;
+       return false;
     }
+
+    public void addAparicionNodo(Byte b) {
+        dicc.replace(b, dicc.get(b).intValue(), dicc.get(b).intValue()+1);
+    }
+
+    public void createNewNodo(Byte b) {
+        dicc.put(b, 1);
+    }
+
+    public void createList() {
+        for (Byte b : this.dicc.keySet()) {
+            this.lista.add(new Nodo(b,this.dicc.get(b),null,null));
+        }
+        Collections.sort(this.lista);
+    }
+    
+    
+    
+   
+    
     
     
     

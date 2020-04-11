@@ -69,7 +69,10 @@ public class Vista extends JFrame implements View{
         barraTools.setFloatable(false);
         JButton select = new JButton("Seleccionar archivo");
         select.addActionListener((ActionEvent) -> {
-          control.selectFile();
+          control.readFile(control.selectFile());
+          control.createList();
+          control.showDicc();
+          System.out.println("--------------------");
           control.showLista();
         });
         barraTools.add(select);
@@ -91,11 +94,11 @@ public class Vista extends JFrame implements View{
     }
     
     public void showError(String s){
-        JOptionPane.showMessageDialog(this, "showError");
+        JOptionPane.showMessageDialog(this, s);
     }
     
-     public void showError2(String s){
-        JOptionPane.showMessageDialog(this, "showError2");
+     public void ioexception(String s){
+        JOptionPane.showMessageDialog(this, "Error de entrada y salida");
     }
 
     public void setControl(Control control) {

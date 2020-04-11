@@ -9,9 +9,12 @@ import java.io.FileNotFoundException;
 import modelo.Modelo;
 import vista.Vista;
 import huffman.huffmanInterface.Controller;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import modelo.Nodo;
 
 /**
@@ -28,31 +31,58 @@ public class Control implements Controller{
         this.modelo=modelo;
     }
     
-    public void selectFile() throw new IOException{
-        //File f = new File(vista.showSelectFile());
-        //Scanner entrada = null;
+    public String selectFile(){
+        return vista.showSelectFile();
+    }
+    
+    public void readFile(String file){
         RandomAccessFile entrada=null;
         try {
-            entrada = new RandomAccessFile(vista.showSelectFile(),"r");
-            //entrada = new Scanner(f);
-            while (entrada.length()!=0) {
-                modelo.addNodo(entrada.readByte(),0, null, null);
+            entrada = new RandomAccessFile(file,"r");
+            int cont =1;
+            while (entrada.length() >= cont) {
+                addToDicc(entrada.readByte());
+                cont++;
             }
         } catch (FileNotFoundException e) {
             vista.notFileFound(e.getMessage());
         } catch (NullPointerException e) {
             vista.notFileSelect();
         } catch (IOException e) {
-            vista.showError(e.getMessage());
+            vista.ioexception(e.toString());
         } finally {
+            try{
                entrada.close();
+            }catch(IOException e){
+                vista.ioexception(e.toString());
+            }   
+        }
+    }
+    
+    private void addToDicc(Byte b){
+        if(modelo.containsByte(b)){
+            modelo.addAparicionNodo(b);
+        }else{
+            modelo.createNewNodo(b);
+        }
+    }
+    
+    public void showDicc(){
+        HashMap<Byte,Integer> dicc = modelo.getDicc();
+        for (Byte i : dicc.keySet()) {
+          System.out.println("Byte: "+i+" Aparic: "+dicc.get(i).intValue());
         }
     }
     
     public void showLista(){
         ArrayList<Nodo> lista = modelo.getLista();
         for(int i=0; i<lista.size(); i++){
-            System.out.println(lista.get(i).getBits());
+            System.out.println("Byte: "+lista.get(i).getBytes()+
+                    " Aparc: "+lista.get(i).getAparicion());
         }
+    }
+
+    public void createList() {
+        modelo.createList();
     }
 }
