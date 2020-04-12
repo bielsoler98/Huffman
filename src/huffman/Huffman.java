@@ -19,10 +19,9 @@ public class Huffman {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Control control = null;
         Modelo model = new Modelo();
         Vista vista = new Vista();
-        control = new Control(vista, model);
+        Control control = new Control(vista, model);
         vista.setControl(control);
         model.setControl(control);
     }

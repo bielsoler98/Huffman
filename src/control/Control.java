@@ -13,9 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Stack;
 import modelo.Fulla;
 import modelo.Nodo;
 
@@ -70,7 +70,54 @@ public class Control implements Controller{
     private void createList() {
         modelo.createList();
     }
+    
+    private void huffmanAvid(){
+        while(modelo.getLista().size()>1){
+            Nodo uno = modelo.getLista().get(1);
+            Nodo zero = modelo.getLista().get(0);
+            Nodo n = new Nodo(zero.getAparicion() + uno.getAparicion(), zero, uno);
+            modelo.getLista().remove(1);
+            modelo.getLista().remove(0);
+            modelo.getLista().add(n);
+            Collections.sort(modelo.getLista());
+        }
+    }
 
+    private void newCodification(){
+        int originaSize = 0;
+        int comprSize = 0;
+        Stack<Nodo> nodes = new Stack<>(); 
+        Stack<String> codif = new Stack<>(); 
+        nodes.push(modelo.getLista().get(0));
+        codif.push("");
+        while (!nodes.isEmpty()) { 
+            Nodo current = nodes.pop();
+            String currentCode = codif.pop();
+            if(current instanceof Fulla){
+                int numBytesCompr = current.getAparicion()*currentCode.length();
+                int numBytesNoCompr = current.getAparicion()*8;
+                originaSize += numBytesNoCompr;
+                comprSize += numBytesCompr;
+                int guany = numBytesNoCompr - numBytesCompr;
+                System.out.println("Byte: " + ((Fulla) current).getId() +
+                        " Codif: " + currentCode + 
+                        " Bytes Compr: " + numBytesCompr + 
+                        " Bytes no Compr: "+ numBytesNoCompr +
+                        " Guany: "+ guany);
+            }
+            if (current.getNodeOne() != null) {
+                nodes.push(current.getNodeOne());
+                codif.push(currentCode+"1");
+            }
+            if (current.getNodeZero() != null) {
+                nodes.push(current.getNodeZero());
+                codif.push(currentCode+"0");
+            } 
+        }
+        int guany = originaSize - comprSize;
+        System.out.println("Tamany Original: " + originaSize+ " Tamany compres: " + comprSize + " Guany: "+ guany);
+    }
+    
     @Override
     public void selectFilePressed() {
         readFile(vista.getSelectFile());
@@ -78,5 +125,9 @@ public class Control implements Controller{
         showDicc();
         System.out.println("--------------------");
         showLista();
+        huffmanAvid();
+        System.out.println("--------------------");
+        newCodification();
+        System.out.println("--------------------");
     }
 }
