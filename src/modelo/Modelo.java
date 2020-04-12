@@ -6,6 +6,7 @@
 package modelo;
 
 import control.Control;
+import huffman.huffmanInterface;
 import huffman.huffmanInterface.Model;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  */
 public class Modelo implements Model{
     
-    private Control control;
+    private huffmanInterface.Controller control;
     private ArrayList<Nodo> lista;
     private HashMap<Byte,Integer> dicc;
     
@@ -31,38 +32,33 @@ public class Modelo implements Model{
     }
 
     public HashMap<Byte,Integer> getDicc() {
-        return this.dicc;
+        return dicc;
     }
     
     public ArrayList<Nodo> getLista(){
-        return this.lista;
+        return lista;
     }
 
+    @Override
     public boolean containsByte(Byte b) {
-       if(dicc.containsKey(b)) return true;
-       return false;
+       return dicc.containsKey(b);
     }
 
+    @Override
     public void addAparicionNodo(Byte b) {
-        dicc.replace(b, dicc.get(b).intValue(), dicc.get(b).intValue()+1);
+        dicc.replace(b, dicc.get(b), dicc.get(b)+1);
     }
 
+    @Override
     public void createNewNodo(Byte b) {
         dicc.put(b, 1);
     }
 
+    @Override
     public void createList() {
-        for (Byte b : this.dicc.keySet()) {
-            this.lista.add(new Nodo(b,this.dicc.get(b),null,null));
+        for (Byte b : dicc.keySet()) {
+            lista.add(new Fulla(b, dicc.get(b)));
         }
-        Collections.sort(this.lista);
+        Collections.sort(lista);
     }
-    
-    
-    
-   
-    
-    
-    
-    
 }

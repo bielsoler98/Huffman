@@ -5,6 +5,7 @@
  */
 package huffman;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import modelo.Nodo;
@@ -16,10 +17,7 @@ import modelo.Nodo;
 public interface huffmanInterface {
     
     interface View{
-        String showSelectFile();
-        void notFileFound(String s);
-        void notFileSelect();
-        void showError(String s);
+        File getSelectFile();
         void ioexception(String s);
     }
     
@@ -33,10 +31,6 @@ public interface huffmanInterface {
     }
     
     interface Controller{
-        String selectFile();
-        void readFile(String file);
-        void showDicc();
-        void showLista();
-        void createList();
+        void selectFilePressed();
     }
 }

@@ -5,16 +5,18 @@
  */
 package control;
 
-import java.io.FileNotFoundException;
+import huffman.huffmanInterface;
 import modelo.Modelo;
 import vista.Vista;
 import huffman.huffmanInterface.Controller;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import modelo.Fulla;
 import modelo.Nodo;
 
 /**
@@ -23,39 +25,22 @@ import modelo.Nodo;
  */
 public class Control implements Controller{
     
-    private Vista vista;
-    private Modelo modelo;
+    private huffmanInterface.View vista;
+    private huffmanInterface.Model modelo;
     
     public Control(Vista vista, Modelo modelo){
         this.vista=vista;
         this.modelo=modelo;
     }
     
-    public String selectFile(){
-        return vista.showSelectFile();
-    }
     
-    public void readFile(String file){
-        RandomAccessFile entrada=null;
+    private void readFile(File file){
         try {
-            entrada = new RandomAccessFile(file,"r");
-            int cont =1;
-            while (entrada.length() >= cont) {
-                addToDicc(entrada.readByte());
-                cont++;
+            for(byte b : Files.readAllBytes(file.toPath())){
+                addToDicc(b);
             }
-        } catch (FileNotFoundException e) {
-            vista.notFileFound(e.getMessage());
-        } catch (NullPointerException e) {
-            vista.notFileSelect();
-        } catch (IOException e) {
-            vista.ioexception(e.toString());
-        } finally {
-            try{
-               entrada.close();
-            }catch(IOException e){
-                vista.ioexception(e.toString());
-            }   
+        } catch (IOException ex) {
+            vista.ioexception(ex.toString());
         }
     }
     
@@ -67,22 +52,31 @@ public class Control implements Controller{
         }
     }
     
-    public void showDicc(){
+    private void showDicc(){
         HashMap<Byte,Integer> dicc = modelo.getDicc();
         for (Byte i : dicc.keySet()) {
-          System.out.println("Byte: "+i+" Aparic: "+dicc.get(i).intValue());
+          System.out.println("Byte: "+i+" Aparic: "+dicc.get(i));
         }
     }
     
-    public void showLista(){
+    private void showLista(){
         ArrayList<Nodo> lista = modelo.getLista();
         for(int i=0; i<lista.size(); i++){
-            System.out.println("Byte: "+lista.get(i).getBytes()+
+            System.out.println("Byte: "+((Fulla)lista.get(i)).getId()+
                     " Aparc: "+lista.get(i).getAparicion());
         }
     }
 
-    public void createList() {
+    private void createList() {
         modelo.createList();
+    }
+
+    @Override
+    public void selectFilePressed() {
+        readFile(vista.getSelectFile());
+        createList();
+        showDicc();
+        System.out.println("--------------------");
+        showLista();
     }
 }
